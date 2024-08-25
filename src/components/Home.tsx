@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase";
+import { collection, query, orderBy, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { db, auth } from "../firebase";
 
 interface Post {
   id: string;
@@ -29,6 +29,14 @@ const Home: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  const handleDelete = async (postId: string) => {
+    try {
+      await deleteDoc(doc(db, "posts", postId));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
   return (
     <div className="home p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Home Feed</h1>
@@ -46,6 +54,14 @@ const Home: React.FC = () => {
               />
             )}
             <p className="text-gray-800">{post.text}</p>
+            {auth.currentUser && auth.currentUser.uid === post.userId && (
+              <button
+                onClick={() => handleDelete(post.id)}
+                className="bg-red-500 text-white px-2 py-1 rounded mt-2"
+              >
+                Delete
+              </button>
+            )}
           </div>
         ))}
       </div>

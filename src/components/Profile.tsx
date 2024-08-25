@@ -6,6 +6,8 @@ import {
   where,
   orderBy,
   onSnapshot,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
@@ -58,6 +60,14 @@ const Profile: React.FC = () => {
     }
   };
 
+  const handleDelete = async (postId: string) => {
+    try {
+      await deleteDoc(doc(db, "posts", postId));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
   if (!user) {
     return (
       <div className="profile p-4">
@@ -97,6 +107,12 @@ const Profile: React.FC = () => {
               />
             )}
             <p className="text-gray-800">{post.text}</p>
+            <button
+              onClick={() => handleDelete(post.id)}
+              className="bg-red-500 text-white px-2 py-1 rounded mt-2"
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
