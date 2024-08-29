@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -8,7 +8,27 @@ import { db, storage } from "../firebase";
 const AddPost: React.FC = () => {
   const [text, setText] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [dragActive, setDragActive] = useState(false);
   const navigate = useNavigate();
+
+  const handleDrag = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setImage(e.dataTransfer.files[0]);
+    }
+  }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -54,15 +74,34 @@ const AddPost: React.FC = () => {
         placeholder="What's on your mind?"
         className="w-full p-2 mb-4 border rounded"
       />
-      <input
-        type="file"
-        onChange={handleImageChange}
-        accept="image/*"
-        className="mb-4"
-      />
+      <div
+        className={`border-2 border-dashed rounded-lg p-4 text-center mb-4 ${
+          dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
+        }`}
+        onDragEnter={handleDrag}
+        onDragLeave={handleDrag}
+        onDragOver={handleDrag}
+        onDrop={handleDrop}
+      >
+        <input
+          type="file"
+          onChange={handleImageChange}
+          accept="image/*"
+          className="hidden"
+          id="image-upload"
+        />
+        <label
+          htmlFor="image-upload"
+          className="cursor-pointer text-blue-500 hover:text-blue-600"
+        >
+          Click to upload
+        </label>{" "}
+        or drag and drop your image here
+        {image && <p className="mt-2 text-sm text-gray-600">{image.name}</p>}
+      </div>
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-blue-500 text-white px-4 py-2 rounded w-full"
       >
         Post
       </button>
