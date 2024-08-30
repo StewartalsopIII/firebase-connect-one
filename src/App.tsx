@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { auth } from "./firebase";
 import Profile from "./components/Profile";
 import Home from "./components/Home";
@@ -25,14 +25,16 @@ const App: React.FC = () => {
         <main className="flex-grow">
           {user ? (
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
               <Route path="/add-post" element={<AddPost />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="*" element={<Navigate to="/add-post" replace />} />
             </Routes>
           ) : (
             <Routes>
               <Route path="/" element={<WelcomeScreen />} />
               <Route path="/signin" element={<SignIn />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           )}
         </main>

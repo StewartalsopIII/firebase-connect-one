@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home as HomeIcon, User, PlusSquare } from "lucide-react";
 
@@ -6,8 +7,8 @@ const BottomTabBar: React.FC = () => {
   return (
     <nav className="bottom-nav bg-gray-800 text-white p-4 flex justify-around items-center">
       <Link
-        to="/"
-        className={`text-2xl ${location.pathname === "/" ? "text-blue-400" : ""}`}
+        to="/home"
+        className={`text-2xl ${location.pathname === "/home" ? "text-blue-400" : ""}`}
       >
         <HomeIcon size={24} />
       </Link>
