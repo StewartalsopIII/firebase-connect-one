@@ -66,46 +66,60 @@ const AddPost: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-post p-4 mx-auto max-w-2xl">
-      <h2 className="text-2xl font-bold mb-4 text-center">Create a New Post</h2>
-      <textarea
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="What's on your mind?"
-        className="w-full p-2 mb-4 border rounded"
-      />
-      <div
-        className={`border-2 border-dashed rounded-lg p-4 text-center mb-4 ${
-          dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-        }`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
+    <div
+      className="flex flex-col items-center justify-center min-h-screen bg-black"
+      style={{
+        backgroundImage: "url('/dragon-background.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="add-post p-4 mx-auto max-w-2xl bg-black bg-opacity-80 text-green-400 font-mono"
       >
-        <input
-          type="file"
-          onChange={handleImageChange}
-          accept="image/*"
-          className="hidden"
-          id="image-upload"
+        <h2 className="text-2xl font-bold mb-4 text-center text-yellow-400 uppercase">
+          Create a New Post
+        </h2>
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What's on your mind?"
+          className="w-full p-2 mb-4 border-2 border-green-400 bg-black text-green-400 font-mono"
         />
-        <label
-          htmlFor="image-upload"
-          className="cursor-pointer text-blue-500 hover:text-blue-600"
+        <div
+          className={`border-2 border-dashed p-4 text-center mb-4 ${
+            dragActive ? "border-yellow-400 bg-green-900" : "border-green-400"
+          }`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
         >
-          Click to upload
-        </label>{" "}
-        or drag and drop your image here
-        {image && <p className="mt-2 text-sm text-gray-600">{image.name}</p>}
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded w-full"
-      >
-        Post
-      </button>
-    </form>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            accept="image/*"
+            className="hidden"
+            id="image-upload"
+          />
+          <label
+            htmlFor="image-upload"
+            className="cursor-pointer text-yellow-400 hover:text-yellow-200 uppercase"
+          >
+            [Click to upload]
+          </label>{" "}
+          or drag and drop your image here
+          {image && <p className="mt-2 text-sm text-green-400">{image.name}</p>}
+        </div>
+        <button
+          type="submit"
+          className="bg-green-400 text-black px-4 py-2 w-full uppercase font-bold hover:bg-yellow-400"
+        >
+          Post
+        </button>
+      </form>
+    </div>
   );
 };
 
